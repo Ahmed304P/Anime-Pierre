@@ -21,18 +21,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Grant execute permission
+    - name: Auto-Find and Build APK
       run: |
-        cd my_app
+        PROJECT_DIR=$(dirname $(find . -name "gradlew" | head -n 1))
+        echo "Found gradlew in: $PROJECT_DIR"
+        cd "$PROJECT_DIR"
         chmod +x gradlew
-
-    - name: Build APK
-      run: |
-        cd my_app
         ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: AniFlux-App
-        path: my_app/app/build/outputs/apk/debug/*.apk
+        path: '**/*.apk'
